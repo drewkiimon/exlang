@@ -4,15 +4,15 @@ import { colors } from '@/components/ui/colors';
 type Post = {
   id: number;
   title?: string;
-  body: string;
-  created_at: string;
+  content: string;
+  createdAt: string;
 };
 
 type Props = {
   post: Post;
 };
 const FeedPost = ({ post }: Props) => {
-  console.log(post.created_at);
+  console.log(post.createdAt);
   return (
     <Box
       key={post.id}
@@ -30,9 +30,9 @@ const FeedPost = ({ post }: Props) => {
           {post.title}
         </Heading>
       )}
-      <Text color={colors.textMuted}>{post.body}</Text>
+      <Text color={colors.textMuted}>{post.content}</Text>
       <Text fontSize="sm" color={colors.textMuted} mt={4}>
-        {new Date(post.created_at).toLocaleString()}
+        {new Date(post.createdAt).toLocaleString()}
       </Text>
     </Box>
   );

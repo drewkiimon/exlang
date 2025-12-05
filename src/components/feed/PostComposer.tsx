@@ -13,6 +13,12 @@ const formSchema = z.object({
 const PostComposer = () => {
   const queryClient = useQueryClient();
 
+  const { register, handleSubmit, reset } = useForm<z.infer<typeof formSchema>>(
+    {
+      resolver: zodResolver(formSchema),
+    }
+  );
+
   const postPost = async ({ content }: { content: string }) => {
     const response = await fetch('http://localhost:4000/api/posts', {
       method: 'POST',
@@ -28,6 +34,7 @@ const PostComposer = () => {
       toaster.success({
         title: 'Post created successfully',
       });
+      reset();
     },
     onError: (error) => {
       console.error(error);
@@ -35,10 +42,6 @@ const PostComposer = () => {
         title: 'Failed to create post',
       });
     },
-  });
-
-  const { register, handleSubmit } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
