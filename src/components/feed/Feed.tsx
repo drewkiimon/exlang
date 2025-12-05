@@ -17,15 +17,17 @@ const dummyPosts = [
   },
 ];
 
-const Feed = () => (
-  <Container maxW="xl" centerContent>
-    <PostComposer />
-    <VStack gap={6} w="100%" align="center" mt={8}>
-      {dummyPosts.map((post) => (
-        <FeedPost key={post.id} post={post} />
-      ))}
-    </VStack>
-  </Container>
-);
+const Feed = () => {
+  return (
+    <Container maxW="xl" centerContent>
+      <PostComposer />
+      <VStack gap={6} w="100%" align="center" mt={8}>
+        {dummyPosts.map((post) => (
+          <FeedPost key={post.id} post={post} />
+        ))}
+      </VStack>
+    </Container>
+  );
+};
 
 export default Feed;

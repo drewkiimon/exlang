@@ -16,6 +16,7 @@
     "@emotion/react": "^11.14.0",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-router": "^1.132.0",
     "@tanstack/react-router-devtools": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
