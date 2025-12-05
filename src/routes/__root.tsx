@@ -1,13 +1,14 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import Navigation from '@/components/Navigation';
+import Main from '@/components/layout/Main';
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <Navigation />
-      <Outlet />
+      <Main>
+        <Outlet />
+      </Main>
       <TanStackDevtools
         config={{
           position: 'bottom-right',

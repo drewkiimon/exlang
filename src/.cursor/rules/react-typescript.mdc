@@ -7,3 +7,5 @@ alwaysApply: false
 - Use Chakra components over native JSX / HTML
 - Always use function based React components
 - Each file should `export default` the component that is named in the file
+- When dealing with colors, we should only use the appropriate colors from `colors.ts`
+- Only ever use the `Link` component from `@tanstack/react-router`

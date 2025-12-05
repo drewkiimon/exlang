@@ -1,0 +1,16 @@
+export const colors = {
+  bgDark: 'hsl(228, 79%, 2%)',
+  bg: 'hsl(222, 55%, 5%)',
+  bgLight: 'hsl(220, 35%, 10%)',
+  text: 'hsl(220, 100%, 98%)',
+  textMuted: 'hsl(220, 35%, 73%)',
+  highlight: 'hsl(220, 20%, 42%)',
+  border: 'hsl(220, 26%, 31%)',
+  borderMuted: 'hsl(220, 37%, 20%)',
+  primary: 'hsl(220, 78%, 76%)',
+  secondary: 'hsl(40, 53%, 60%)',
+  danger: 'hsl(9, 26%, 64%)',
+  warning: 'hsl(52, 19%, 57%)',
+  success: 'hsl(146, 17%, 59%)',
+  info: 'hsl(217, 28%, 65%)',
+} as const;
