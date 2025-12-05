@@ -1,0 +1,9 @@
+---
+globs: *.tsx
+alwaysApply: false
+---
+
+- Never use TailwindCSS
+- Use Chakra components over native JSX / HTML
+- Always use function based React components
+- Each file should `export default` the component that is named in the file
