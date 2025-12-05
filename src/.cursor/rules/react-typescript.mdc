@@ -9,3 +9,4 @@ alwaysApply: false
 - Each file should `export default` the component that is named in the file
 - When dealing with colors, we should only use the appropriate colors from `colors.ts`
 - Only ever use the `Link` component from `@tanstack/react-router`
+- When dealing with forms, we should always use `react-hook-form` and the `zod` resolver
