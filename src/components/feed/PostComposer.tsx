@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { colors } from '@/components/ui/colors';
+import { toaster, Toaster } from '@/components/ui/toaster';
 
 const formSchema = z.object({
   content: z.string().min(1),
@@ -15,6 +16,9 @@ const PostComposer = () => {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    toaster.success({
+      title: 'Post created successfully',
+    });
   };
 
   return (
@@ -36,6 +40,7 @@ const PostComposer = () => {
         />
         <Button type="submit">Post</Button>
       </form>
+      <Toaster />
     </Box>
   );
 };
