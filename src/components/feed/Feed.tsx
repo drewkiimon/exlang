@@ -1,28 +1,28 @@
 import { Container, VStack } from '@chakra-ui/react';
 
+import { useQuery } from '@tanstack/react-query';
 import FeedPost from '@/components/feed/FeedPost';
 import PostComposer from '@/components/feed/PostComposer';
 
-const dummyPosts = [
-  { id: 1, title: 'First Post', body: 'This is the body of the first post.' },
-  {
-    id: 2,
-    title: '一番目の投稿',
-    body: 'これは一番目の投稿の本文です。',
-  },
-  {
-    id: 3,
-    title: 'Third Post',
-    body: 'This is the third dummy post in the feed.',
-  },
-];
-
 const Feed = () => {
+  const getPosts = async () => {
+    const response = await fetch('http://localhost:4000/api/posts');
+    return response.json();
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => getPosts(),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <Container maxW="xl" centerContent>
       <PostComposer />
       <VStack gap={6} w="100%" align="center" mt={8}>
-        {dummyPosts.map((post) => (
+        {data?.posts.map((post) => (
           <FeedPost key={post.id} post={post} />
         ))}
       </VStack>

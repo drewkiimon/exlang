@@ -5,12 +5,14 @@ type Post = {
   id: number;
   title?: string;
   body: string;
+  created_at: string;
 };
 
 type Props = {
   post: Post;
 };
 const FeedPost = ({ post }: Props) => {
+  console.log(post.created_at);
   return (
     <Box
       key={post.id}
@@ -29,6 +31,9 @@ const FeedPost = ({ post }: Props) => {
         </Heading>
       )}
       <Text color={colors.textMuted}>{post.body}</Text>
+      <Text fontSize="sm" color={colors.textMuted} mt={4}>
+        {new Date(post.created_at).toLocaleString()}
+      </Text>
     </Box>
   );
 };

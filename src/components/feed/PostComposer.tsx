@@ -2,23 +2,47 @@ import { Box, Button, Textarea } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { colors } from '@/components/ui/colors';
-import { toaster, Toaster } from '@/components/ui/toaster';
+import { Toaster, toaster } from '@/components/ui/toaster';
 
 const formSchema = z.object({
   content: z.string().min(1),
 });
 
 const PostComposer = () => {
+  const queryClient = useQueryClient();
+
+  const postPost = async ({ content }: { content: string }) => {
+    const response = await fetch('http://localhost:4000/api/posts', {
+      method: 'POST',
+      body: JSON.stringify({ content }),
+    });
+    return response.json();
+  };
+
+  const { mutate: postPostMutation } = useMutation({
+    mutationFn: postPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      toaster.success({
+        title: 'Post created successfully',
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      toaster.error({
+        title: 'Failed to create post',
+      });
+    },
+  });
+
   const { register, handleSubmit } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    toaster.success({
-      title: 'Post created successfully',
-    });
+    postPostMutation({ content: data.content });
   };
 
   return (

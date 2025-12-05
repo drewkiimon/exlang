@@ -1,4 +1,3 @@
-import { Box, Text } from '@chakra-ui/react';
 import { createFileRoute } from '@tanstack/react-router';
 import Feed from '@/components/feed/Feed';
 
