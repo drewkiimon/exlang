@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import exlangFetch from '@/utils/exlangFetch';
 import { Box, Skeleton } from '@chakra-ui/react';
+import exlangFetch from '@/utils/exlangFetch';
 
 interface User {
-  id: string;
+  uuid: string;
   username: string;
   email: string;
+  firstName: string;
+  lastName: string;
 }
 
 interface AuthState {
@@ -24,34 +26,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const validateToken = async () => {
     const token = localStorage.getItem('token');
-    console.log('AAA validateToken', token);
 
     if (!token) {
       setIsLoading(false);
       return;
     }
 
-    const response = await exlangFetch('/auth/validate-token');
-    console.log('AAA response', response);
+    const response = await exlangFetch('/auth/validate-token', {
+      method: 'POST',
+    });
+
     if (!response.ok) {
       localStorage.removeItem('token');
       setIsLoading(false);
       return;
     }
 
-    const userData = await response.json();
-    console.log('AAA userData', userData);
-    setUser(userData.user);
+    const data = await response.json();
+
+    setUser({
+      uuid: data.uuid,
+      username: data.username,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+
     setIsAuthenticated(true);
     setIsLoading(false);
   };
-  // Restore auth state on app load
+
   useEffect(() => {
-    console.log('AAA use effect');
     validateToken();
   }, []);
 
-  // Show loading state while checking auth
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" h="100vh">
@@ -69,7 +77,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const login = async (username: string, password: string) => {
-    console.log('login', username, password);
     const usernamePassword = `${username}:${password}`;
     const credentials = btoa(usernamePassword);
 
@@ -82,12 +89,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error('Authentication failed');
     }
 
-    console.log('response', response);
     const userData = await response.json();
-    console.log('userData', userData);
     setUser(userData);
     setIsAuthenticated(true);
-    // Store token for persistence
+
     localStorage.setItem('token', userData.token);
   };
 

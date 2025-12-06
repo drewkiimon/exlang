@@ -5,6 +5,8 @@ import z from 'zod';
 import { colors } from '@/components/ui/colors';
 import { Toaster, toaster } from '@/components/ui/toaster';
 import { useAuth } from '@/auth';
+import { useRouter } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 
 const schema = z.object({
   username: z
@@ -17,6 +19,8 @@ const schema = z.object({
 
 const SignInForm = () => {
   const auth = useAuth();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -34,7 +38,8 @@ const SignInForm = () => {
       toaster.success({
         title: 'Signed in successfully',
       });
-      // router.navigate({ to: '/' });
+      router.navigate({ to: '/', resetScroll: true, replace: true });
+      queryClient.invalidateQueries();
     } catch (error) {
       toaster.error({
         title: 'Failed to sign in',
