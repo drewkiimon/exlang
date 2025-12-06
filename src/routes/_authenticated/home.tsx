@@ -6,7 +6,6 @@ export const Route = createFileRoute('/_authenticated/home')({
 
 function Home() {
   const { auth } = Route.useRouteContext();
-  console.log('AAA auth', auth);
 
   return (
     <div className="p-6">

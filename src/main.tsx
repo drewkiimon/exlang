@@ -2,38 +2,68 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-// Import the generated route tree
 import { routeTree } from './routeTree.gen';
 import reportWebVitals from './reportWebVitals.ts';
 
 import { Provider } from '@/components/ui/provider';
+import { AuthProvider, useAuth } from '@/auth';
 import './styles.css';
 
-// Create a new router instance
+interface MyRouterContext {
+  auth: {
+    isAuthenticated: boolean;
+    user: {
+      uuid: string;
+      username: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+    } | null;
+    login: (username: string, password: string) => Promise<void>;
+    logout: () => void;
+  };
+}
+
 const router = createRouter({
   routeTree,
-  context: {},
+  context: {
+    auth: undefined!,
+  } as MyRouterContext,
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
 });
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
   }
 }
 
-// Render the app
+// ? I am unsure how this works
+function App() {
+  const auth = useAuth();
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        auth,
+      }}
+    />
+  );
+}
+
 const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
       <Provider>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </Provider>
     </StrictMode>
   );
