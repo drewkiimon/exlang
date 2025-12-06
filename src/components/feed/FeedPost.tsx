@@ -12,7 +12,6 @@ type Props = {
   post: Post;
 };
 const FeedPost = ({ post }: Props) => {
-  console.log(post.createdAt);
   return (
     <Box
       key={post.id}

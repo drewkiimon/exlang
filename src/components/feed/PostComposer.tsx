@@ -36,8 +36,7 @@ const PostComposer = () => {
       });
       reset();
     },
-    onError: (error) => {
-      console.error(error);
+    onError: (_error) => {
       toaster.error({
         title: 'Failed to create post',
       });

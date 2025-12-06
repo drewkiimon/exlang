@@ -15,7 +15,7 @@ const Navigation = () => {
       py={3}
       h={NavigationHeight}
     >
-      <Link to="/">Home</Link>
+      <Link to="/">Exlang</Link>
     </Flex>
   );
 };
