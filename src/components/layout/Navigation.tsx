@@ -1,5 +1,5 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
-import { Link, useMatchRoute } from '@tanstack/react-router';
+import { Link, useMatchRoute, useRouter } from '@tanstack/react-router';
 
 import { colors } from '@/components/ui/colors';
 
@@ -35,6 +35,8 @@ const NavLink = ({ to, label }: { to: string; label: string }) => {
 };
 
 const Navigation = () => {
+  const token = localStorage.getItem('token');
+
   return (
     <Flex
       as="nav"
@@ -48,7 +50,16 @@ const Navigation = () => {
       <HStack gap={4}>
         <NavLink to="/" label="Exlang" />
       </HStack>
-      <NavLink to="/sign-up" label="Sign Up" />
+      {token ? (
+        <Box>
+          <NavLink to="/auth/logout" label="Logout" />
+        </Box>
+      ) : (
+        <HStack gap={4}>
+          <NavLink to="/auth/sign-up" label="Sign Up" />
+          <NavLink to="/auth/sign-in" label="Sign In" />
+        </HStack>
+      )}
     </Flex>
   );
 };
