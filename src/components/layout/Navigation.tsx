@@ -1,25 +1,20 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
-import {
-  Link,
-  useMatchRoute,
-  useRouter,
-  useRouterState,
-} from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { Link, useMatchRoute } from '@tanstack/react-router';
+
 import { colors } from '@/components/ui/colors';
 
 export const NavigationHeight = '64px';
 
-const navigationItems = [
-  {
-    label: 'Home',
-    to: '/',
-  },
-  {
-    label: 'Sign Up',
-    to: '/sign-up',
-  },
-];
+// const navigationItems = [
+//   {
+//     label: 'Home',
+//     to: '/',
+//   },
+//   {
+//     label: 'Sign Up',
+//     to: '/sign-up',
+//   },
+// ];
 
 const NavLink = ({ to, label }: { to: string; label: string }) => {
   const matchRoute = useMatchRoute();
