@@ -1,6 +1,7 @@
-import { Container, VStack } from '@chakra-ui/react';
+import { Container, Spinner, VStack } from '@chakra-ui/react';
 
 import { useQuery } from '@tanstack/react-query';
+
 import FeedPost from '@/components/feed/FeedPost';
 import PostComposer from '@/components/feed/PostComposer';
 
@@ -15,7 +16,7 @@ const Feed = () => {
     queryFn: () => getPosts(),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Spinner />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

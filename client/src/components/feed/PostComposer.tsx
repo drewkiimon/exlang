@@ -3,8 +3,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { hc } from 'hono/client';
+import type { PostsRouterType } from '../../../../server/src/routes/posts';
 import { colors } from '@/components/ui/colors';
 import { Toaster, toaster } from '@/components/ui/toaster';
+
+const client = hc<PostsRouterType>('http://localhost:4000/api');
 
 const formSchema = z.object({
   content: z.string().min(1),
@@ -20,9 +24,8 @@ const PostComposer = () => {
   );
 
   const postPost = async ({ content }: { content: string }) => {
-    const response = await fetch('http://localhost:4000/api/posts', {
-      method: 'POST',
-      body: JSON.stringify({ content }),
+    const response = await client.posts.$post({
+      json: { content },
     });
     return response.json();
   };
