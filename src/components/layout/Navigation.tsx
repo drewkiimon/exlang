@@ -27,7 +27,7 @@ const NavLink = ({
   onClick?: () => void;
 }) => {
   const matchRoute = useMatchRoute();
-  const isActive = !!matchRoute({ to });
+  const isActive = to && !!matchRoute({ to });
 
   return (
     <Box
