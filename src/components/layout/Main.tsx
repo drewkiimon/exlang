@@ -13,9 +13,6 @@ const Main = ({ children }: { children: React.ReactNode }) => (
       height={`calc(100vh - ${NavigationHeight})`}
       overflow="auto"
       style={{
-        '&::-webkit-scrollbar': {
-          display: 'none',
-        },
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
       }}
