@@ -24,25 +24,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const validateToken = async () => {
     const token = localStorage.getItem('token');
+    console.log('AAA validateToken', token);
 
-    if (token) {
-      // Validate token with your API
-      const response = await exlangFetch('/auth/validate-token');
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData.user);
-        setIsAuthenticated(true);
-      } else {
-        localStorage.removeItem('token');
-        setIsLoading(false);
-      }
-    } else {
+    if (!token) {
       setIsLoading(false);
+      return;
     }
+
+    const response = await exlangFetch('/auth/validate-token');
+    console.log('AAA response', response);
+    if (!response.ok) {
+      localStorage.removeItem('token');
+      setIsLoading(false);
+      return;
+    }
+
+    const userData = await response.json();
+    console.log('AAA userData', userData);
+    setUser(userData.user);
+    setIsAuthenticated(true);
+    setIsLoading(false);
   };
   // Restore auth state on app load
   useEffect(() => {
+    console.log('AAA use effect');
     validateToken();
   }, []);
 
@@ -64,23 +69,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const login = async (username: string, password: string) => {
+    console.log('login', username, password);
     const usernamePassword = `${username}:${password}`;
     const credentials = btoa(usernamePassword);
-    // Replace with your authentication logic
+
     const response = await exlangFetch('/auth/sign-in', {
       method: 'POST',
       body: JSON.stringify({ credentials }),
     });
 
-    if (response.ok) {
-      const userData = await response.json();
-      setUser(userData);
-      setIsAuthenticated(true);
-      // Store token for persistence
-      localStorage.setItem('token', userData.token);
-    } else {
+    if (!response.ok) {
       throw new Error('Authentication failed');
     }
+
+    console.log('response', response);
+    const userData = await response.json();
+    console.log('userData', userData);
+    setUser(userData);
+    setIsAuthenticated(true);
+    // Store token for persistence
+    localStorage.setItem('token', userData.token);
   };
 
   const logout = () => {

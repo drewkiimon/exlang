@@ -29,23 +29,8 @@ const SignInForm = () => {
 
   const onSubmit = async ({ username, password }: z.infer<typeof schema>) => {
     try {
-      console.log('CCC', username, password);
       await auth.login(username, password);
-      // const usernamePassword = `${username}:${password}`;
-      // const credentials = btoa(usernamePassword);
 
-      // const response = await exlangFetch('/auth/sign-in', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ credentials }),
-      // });
-
-      // if (!response.ok) {
-      //   console.log('CCC', response);
-      //   throw new Error('Failed to sign in');
-      // }
-
-      // const data = await response.json();
-      // localStorage.setItem('token', data.token);
       toaster.success({
         title: 'Signed in successfully',
       });

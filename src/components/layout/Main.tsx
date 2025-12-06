@@ -2,12 +2,14 @@ import { Box } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import { colors } from '@/components/ui/colors';
 import Navigation, { NavigationHeight } from '@/components/layout/Navigation';
+import { useAuth } from '@/auth';
 
 const Main = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const token = localStorage.getItem('token');
 
-  if (!token) {
+  const auth = useAuth();
+
+  if (!auth.isAuthenticated) {
     router.navigate({ to: '/auth/sign-in' });
   }
 
