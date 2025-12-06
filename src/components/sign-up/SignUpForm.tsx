@@ -1,31 +1,42 @@
-import { colors } from '@/components/ui/colors';
 import { Box, Button, Field, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import z from 'zod';
+import { colors } from '@/components/ui/colors';
 
-const schema = z.object({
-  username: z.string('Please select a username').min(3).max(20),
-  email: z.email('Please enter a valid email address'),
-  password: z
-    .string('Please enter a password')
-    .min(8)
-    .max(32)
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    ),
-  confirmPassword: z
-    .string('Please enter a password')
-    .min(8)
-    .max(32)
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    ),
-});
+const passwordSchema = z
+  .string()
+  .min(8, { message: 'Password must be at least 8 characters' })
+  .max(20, { message: 'Password must be at most 20 characters' })
+  .refine((password) => /[A-Z]/.test(password), {
+    message: 'Password must contain an uppercase letter',
+  })
+  .refine((password) => /[a-z]/.test(password), {
+    message: 'Password must contain a lowercase letter',
+  })
+  .refine((password) => /[0-9]/.test(password), {
+    message: 'Password must contain a number',
+  })
+  .refine((password) => /[!@#$%^&*]/.test(password), {
+    message: 'Password must contain a special character',
+  });
+
+const schema = z
+  .object({
+    username: z.string('Please select a username').min(3).max(20),
+    email: z.email('Please enter a valid email address'),
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+    mode: 'onSubmit',
     defaultValues: {
       username: '',
       email: '',
@@ -87,7 +98,9 @@ const SignUpForm = () => {
                 {form.formState.errors.confirmPassword?.message}
               </Field.ErrorText>
             </Field.Root>
-            <Button type="submit">Sign up</Button>
+            <Button w="100%" type="submit" bg={colors.primary}>
+              Sign up
+            </Button>
           </VStack>
         </form>
       </FormProvider>

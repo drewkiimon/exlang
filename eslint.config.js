@@ -12,6 +12,14 @@ export default [
           default: 'array-simple',
         },
       ],
+      'no-restricted-globals': [
+        'error',
+        {
+          name: 'fetch',
+          message:
+            'Do not use fetch directly. Use exlangFetch or an approved abstraction instead.',
+        },
+      ],
     },
   },
 ];

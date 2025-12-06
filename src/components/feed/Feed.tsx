@@ -32,7 +32,10 @@ const Feed = () => {
               .map((_, index) => (
                 <Skeleton key={index} height="150px" w="100%" />
               ))
-          : data?.posts.map((post) => <FeedPost key={post.id} post={post} />)}
+          : //   I dislike the any type :'(
+            data?.posts.map((post: any) => (
+              <FeedPost key={post.id} post={post} />
+            ))}
       </VStack>
     </Container>
   );

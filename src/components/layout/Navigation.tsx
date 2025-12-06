@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, HStack } from '@chakra-ui/react';
 import { Link } from '@tanstack/react-router';
 import { colors } from '@/components/ui/colors';
 
@@ -15,7 +15,10 @@ const Navigation = () => {
       py={3}
       h={NavigationHeight}
     >
-      <Link to="/">Exlang</Link>
+      <HStack gap={4}>
+        <Link to="/">Exlang</Link>
+      </HStack>
+      <Link to="/sign-up">Sign Up</Link>
     </Flex>
   );
 };
