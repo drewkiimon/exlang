@@ -41,17 +41,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return;
     }
-
-    const data = await response.json();
+    // I really need to standardize this
+    const { verified } = await response.json();
 
     setUser({
-      uuid: data.uuid,
-      username: data.username,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      uuid: verified.uuid,
+      username: verified.username,
+      email: verified.email,
+      firstName: verified.firstName,
+      lastName: verified.lastName,
     });
-
     setIsAuthenticated(true);
     setIsLoading(false);
   };
@@ -89,11 +88,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error('Authentication failed');
     }
 
-    const userData = await response.json();
-    setUser(userData);
+    const { token, user: userData } = await response.json();
+
+    setUser({
+      uuid: userData.uuid,
+      username: userData.username,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+    });
     setIsAuthenticated(true);
 
-    localStorage.setItem('token', userData.token);
+    localStorage.setItem('token', token);
   };
 
   const logout = () => {

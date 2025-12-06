@@ -2,11 +2,11 @@ import { Box, Button, Field, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import z from 'zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { colors } from '@/components/ui/colors';
 import { Toaster, toaster } from '@/components/ui/toaster';
 import { useAuth } from '@/auth';
-import { useRouter } from '@tanstack/react-router';
-import { useQueryClient } from '@tanstack/react-query';
+import { router } from '@/router';
 
 const schema = z.object({
   username: z
@@ -19,7 +19,6 @@ const schema = z.object({
 
 const SignInForm = () => {
   const auth = useAuth();
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof schema>>({
