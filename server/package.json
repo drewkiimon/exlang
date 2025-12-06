@@ -1,0 +1,30 @@
+{
+  "name": "exlang-be",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "db-create": "prisma migrate dev --create-only",
+    "db-migrate": "prisma migrate dev",
+    "db-apply": "prisma migrate deploy",
+    "db-reset": "prisma migrate reset; tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@hono/zod-validator": "^0.7.5",
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "hono": "^4.10.7",
+    "pg": "^8.16.3",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.25",
+    "@types/pg": "^8.15.6",
+    "dotenv": "^17.2.3",
+    "prisma": "^7.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.3"
+  }
+}

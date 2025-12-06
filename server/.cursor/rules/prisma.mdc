@@ -1,0 +1,13 @@
+---
+globs: *.prisma
+alwaysApply: false
+---
+
+- Always @@map a table to the plural of the model name
+- Every column that is camel cased (such as firstName) should `@map` to a snake case of the column name (firstName to `@map("first_name"))
+- Never @map a single word column (such as uuid, id, and username)
+- Every Date type should end with `at` (such as `createdAt`, which maps to `created_at`)
+- Every model should have a `id`, `uuid`, and a `createdAt` by default
+- ID for a model must look like `id Int @id @default(autoincrement())`
+- UUID for a model is must look like `uuid String @unique @default(uuid())`
+- All `@relation` must be done looking at the UUID of the models
