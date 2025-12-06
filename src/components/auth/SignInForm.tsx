@@ -2,10 +2,9 @@ import { Box, Button, Field, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import z from 'zod';
-import { useRouter } from '@tanstack/react-router';
 import { colors } from '@/components/ui/colors';
-import exlangFetch from '@/utils/exlangFetch';
 import { Toaster, toaster } from '@/components/ui/toaster';
+import { useAuth } from '@/auth';
 
 const schema = z.object({
   username: z
@@ -17,7 +16,7 @@ const schema = z.object({
 });
 
 const SignInForm = () => {
-  const router = useRouter();
+  const auth = useAuth();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -30,25 +29,27 @@ const SignInForm = () => {
 
   const onSubmit = async ({ username, password }: z.infer<typeof schema>) => {
     try {
-      const usernamePassword = `${username}:${password}`;
-      const credentials = btoa(usernamePassword);
+      console.log('CCC', username, password);
+      await auth.login(username, password);
+      // const usernamePassword = `${username}:${password}`;
+      // const credentials = btoa(usernamePassword);
 
-      const response = await exlangFetch('/auth/sign-in', {
-        method: 'POST',
-        body: JSON.stringify({ credentials }),
-      });
+      // const response = await exlangFetch('/auth/sign-in', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ credentials }),
+      // });
 
-      if (!response.ok) {
-        console.log('CCC', response);
-        throw new Error('Failed to sign in');
-      }
+      // if (!response.ok) {
+      //   console.log('CCC', response);
+      //   throw new Error('Failed to sign in');
+      // }
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
+      // const data = await response.json();
+      // localStorage.setItem('token', data.token);
       toaster.success({
         title: 'Signed in successfully',
       });
-      router.navigate({ to: '/' });
+      // router.navigate({ to: '/' });
     } catch (error) {
       toaster.error({
         title: 'Failed to sign in',

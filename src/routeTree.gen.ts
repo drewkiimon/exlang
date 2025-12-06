@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as AuthLogoutRouteImport } from './routes/auth/logout'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,42 +28,33 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLogoutRoute = AuthLogoutRouteImport.update({
-  id: '/auth/logout',
-  path: '/auth/logout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth/logout': typeof AuthLogoutRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth/logout': typeof AuthLogoutRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth/logout': typeof AuthLogoutRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/logout' | '/auth/sign-in' | '/auth/sign-up'
+  fullPaths: '/' | '/auth/sign-in' | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/logout' | '/auth/sign-in' | '/auth/sign-up'
-  id: '__root__' | '/' | '/auth/logout' | '/auth/sign-in' | '/auth/sign-up'
+  to: '/' | '/auth/sign-in' | '/auth/sign-up'
+  id: '__root__' | '/' | '/auth/sign-in' | '/auth/sign-up'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthLogoutRoute: typeof AuthLogoutRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
 }
@@ -92,19 +82,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/logout': {
-      id: '/auth/logout'
-      path: '/auth/logout'
-      fullPath: '/auth/logout'
-      preLoaderRoute: typeof AuthLogoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthLogoutRoute: AuthLogoutRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
 }

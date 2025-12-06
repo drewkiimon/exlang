@@ -66,9 +66,8 @@ const SignUpForm = () => {
     confirmPassword,
     username,
   }: z.infer<typeof schema>) => {
-    // Double checking
-    form.setError('confirmPassword', { message: 'Passwords do not match' });
     if (password !== confirmPassword) {
+      form.setError('confirmPassword', { message: 'Passwords do not match' });
       return;
     }
 
