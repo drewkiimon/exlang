@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const userResponse = await exlangFetch('/users/me');
-    const userData = await userResponse.json();
+    const { user: userData } = await userResponse.json();
 
     setUser({
       uuid: userData.uuid,
@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('token', token);
 
     const userResponse = await exlangFetch('/users/me');
-    const userData = await userResponse.json();
+    const { user: userData } = await userResponse.json();
 
     setUser({
       uuid: userData.uuid,
@@ -143,7 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('token', token);
 
     const userResponse = await exlangFetch('/users/me');
-    const userData = await userResponse.json();
+    const { user: userData } = await userResponse.json();
 
     setUser({
       uuid: userData.uuid,
