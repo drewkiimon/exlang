@@ -10,10 +10,18 @@ interface User {
   lastName: string;
 }
 
+interface SignupParams {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   login: (username: string, password: string) => Promise<void>;
+  signup: (signupParams: SignupParams) => Promise<void>;
   logout: () => void;
 }
 // https://tanstack.com/router/latest/docs/framework/react/how-to/setup-authentication#quick-start
@@ -41,15 +49,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return;
     }
-    // I really need to standardize this
-    const { verified } = await response.json();
+
+    const userResponse = await exlangFetch('/users/me');
+    const userData = await userResponse.json();
 
     setUser({
-      uuid: verified.uuid,
-      username: verified.username,
-      email: verified.email,
-      firstName: verified.firstName,
-      lastName: verified.lastName,
+      uuid: userData.uuid,
+      username: userData.username,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
     });
     setIsAuthenticated(true);
     setIsLoading(false);
@@ -88,7 +97,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error('Authentication failed');
     }
 
-    const { token, user: userData } = await response.json();
+    const { token } = await response.json();
+    localStorage.setItem('token', token);
+
+    const userResponse = await exlangFetch('/users/me');
+    const userData = await userResponse.json();
 
     setUser({
       uuid: userData.uuid,
@@ -98,8 +111,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       lastName: userData.lastName,
     });
     setIsAuthenticated(true);
-
-    localStorage.setItem('token', token);
   };
 
   const logout = () => {
@@ -108,8 +119,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('token');
   };
 
+  const signup = async ({
+    username,
+    firstName,
+    lastName,
+    email,
+    password,
+  }: {
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) => {
+    const usernamePassword = `${username}:${password}`;
+    const credentials = btoa(usernamePassword);
+    const response = await exlangFetch('/auth/sign-up', {
+      method: 'POST',
+      body: JSON.stringify({ firstName, lastName, email, credentials }),
+    });
+
+    const { token } = await response.json();
+    localStorage.setItem('token', token);
+
+    const userResponse = await exlangFetch('/users/me');
+    const userData = await userResponse.json();
+
+    setUser({
+      uuid: userData.uuid,
+      username: userData.username,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+    });
+    setIsAuthenticated(true);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, signup }}
+    >
       {children}
     </AuthContext.Provider>
   );

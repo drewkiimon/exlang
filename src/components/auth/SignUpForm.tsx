@@ -6,6 +6,7 @@ import { useRouter } from '@tanstack/react-router';
 import { colors } from '@/components/ui/colors';
 import exlangFetch from '@/utils/exlangFetch';
 import { toaster } from '@/components/ui/toaster';
+import { useAuth } from '@/auth';
 
 const passwordSchema = z
   .string()
@@ -44,6 +45,7 @@ const schema = z
 
 const SignUpForm = () => {
   const router = useRouter();
+  const { signup } = useAuth();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -71,26 +73,20 @@ const SignUpForm = () => {
       return;
     }
 
-    const usernamePassword = `${username}:${password}`;
-    const credentials = btoa(usernamePassword);
-    const response = await exlangFetch('/auth/sign-up', {
-      method: 'POST',
-      body: JSON.stringify({ firstName, lastName, email, credentials }),
-    });
+    try {
+      await signup({ firstName, lastName, email, password, username });
 
-    if (!response.ok) {
+      toaster.success({
+        title: 'Signed up successfully',
+      });
+
+      router.navigate({ to: '/' });
+    } catch (error) {
       toaster.error({
         title: 'Failed to sign up',
       });
       return;
     }
-
-    const data = await response.json();
-    localStorage.setItem('token', data.token);
-    toaster.success({
-      title: 'Signed up successfully',
-    });
-    router.navigate({ to: '/' });
   };
 
   return (
