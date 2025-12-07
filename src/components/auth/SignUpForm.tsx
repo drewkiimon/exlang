@@ -2,7 +2,11 @@ import { Box, Button, Field, Input, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import z from 'zod';
+import { useRouter } from '@tanstack/react-router';
 import { colors } from '@/components/ui/colors';
+import exlangFetch from '@/utils/exlangFetch';
+import { toaster } from '@/components/ui/toaster';
+import { useAuth } from '@/auth';
 
 const passwordSchema = z
   .string()
@@ -23,6 +27,12 @@ const passwordSchema = z
 
 const schema = z
   .object({
+    firstName: z
+      .string('Please enter your first name')
+      .min(1, 'First name is required'),
+    lastName: z
+      .string('Please enter your last name')
+      .min(1, 'Last name is required'),
     username: z.string('Please select a username').min(3).max(20),
     email: z.email('Please enter a valid email address'),
     password: passwordSchema,
@@ -34,10 +44,15 @@ const schema = z
   });
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const { signup } = useAuth();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     mode: 'onSubmit',
     defaultValues: {
+      firstName: '',
+      lastName: '',
       username: '',
       email: '',
       password: '',
@@ -45,8 +60,33 @@ const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data);
+  const onSubmit = async ({
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    username,
+  }: z.infer<typeof schema>) => {
+    if (password !== confirmPassword) {
+      form.setError('confirmPassword', { message: 'Passwords do not match' });
+      return;
+    }
+
+    try {
+      await signup({ firstName, lastName, email, password, username });
+
+      toaster.success({
+        title: 'Signed up successfully',
+      });
+
+      router.navigate({ to: '/' });
+    } catch (error) {
+      toaster.error({
+        title: 'Failed to sign up',
+      });
+      return;
+    }
   };
 
   return (
@@ -54,6 +94,28 @@ const SignUpForm = () => {
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <VStack gap={4}>
+            <Field.Root invalid={!!form.formState.errors.firstName}>
+              <Field.Label>First Name</Field.Label>
+              <Input
+                type="text"
+                placeholder="First Name"
+                {...form.register('firstName')}
+              />
+              <Field.ErrorText>
+                {form.formState.errors.firstName?.message}
+              </Field.ErrorText>
+            </Field.Root>
+            <Field.Root invalid={!!form.formState.errors.lastName}>
+              <Field.Label>Last Name</Field.Label>
+              <Input
+                type="text"
+                placeholder="Last Name"
+                {...form.register('lastName')}
+              />
+              <Field.ErrorText>
+                {form.formState.errors.lastName?.message}
+              </Field.ErrorText>
+            </Field.Root>
             <Field.Root invalid={!!form.formState.errors.username}>
               <Field.Label>Username</Field.Label>
               <Input

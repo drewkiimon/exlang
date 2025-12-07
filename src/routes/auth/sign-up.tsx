@@ -1,8 +1,8 @@
-import { Box } from '@chakra-ui/react';
 import { createFileRoute } from '@tanstack/react-router';
-import SignUpForm from '@/components/sign-up/SignUpForm';
+import { Box } from '@chakra-ui/react';
+import SignUpForm from '@/components/auth/SignUpForm';
 
-export const Route = createFileRoute('/sign-up')({
+export const Route = createFileRoute('/auth/sign-up')({
   component: RouteComponent,
 });
 

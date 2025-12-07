@@ -1,29 +1,33 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
-import {
-  Link,
-  useMatchRoute,
-  useRouter,
-  useRouterState,
-} from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { Link, useMatchRoute, useRouter } from '@tanstack/react-router';
+
 import { colors } from '@/components/ui/colors';
+import { useAuth } from '@/auth';
 
 export const NavigationHeight = '64px';
 
-const navigationItems = [
-  {
-    label: 'Home',
-    to: '/',
-  },
-  {
-    label: 'Sign Up',
-    to: '/sign-up',
-  },
-];
+// const navigationItems = [
+//   {
+//     label: 'Home',
+//     to: '/',
+//   },
+//   {
+//     label: 'Sign Up',
+//     to: '/sign-up',
+//   },
+// ];
 
-const NavLink = ({ to, label }: { to: string; label: string }) => {
+const NavLink = ({
+  to,
+  label,
+  onClick,
+}: {
+  to?: string;
+  label: string;
+  onClick?: () => void;
+}) => {
   const matchRoute = useMatchRoute();
-  const isActive = !!matchRoute({ to });
+  const isActive = to && !!matchRoute({ to });
 
   return (
     <Box
@@ -34,12 +38,17 @@ const NavLink = ({ to, label }: { to: string; label: string }) => {
       transition="background 0.15s"
       fontWeight={isActive ? 'bold' : 'normal'}
     >
-      <Link to={to}>{label}</Link>
+      <Link to={to} onClick={onClick}>
+        {label}
+      </Link>
     </Box>
   );
 };
 
 const Navigation = () => {
+  const auth = useAuth();
+  const authenticated = auth.isAuthenticated;
+
   return (
     <Flex
       as="nav"
@@ -53,7 +62,16 @@ const Navigation = () => {
       <HStack gap={4}>
         <NavLink to="/" label="Exlang" />
       </HStack>
-      <NavLink to="/sign-up" label="Sign Up" />
+      {authenticated ? (
+        <Box>
+          <NavLink onClick={auth.logout} label="Logout" />
+        </Box>
+      ) : (
+        <HStack gap={4}>
+          <NavLink to="/auth/sign-up" label="Sign Up" />
+          <NavLink to="/auth/sign-in" label="Sign In" />
+        </HStack>
+      )}
     </Flex>
   );
 };

@@ -6,6 +6,9 @@ type Post = {
   title?: string;
   content: string;
   createdAt: string;
+  author: {
+    username: string;
+  };
 };
 
 type Props = {
@@ -31,7 +34,7 @@ const FeedPost = ({ post }: Props) => {
       )}
       <Text color={colors.textMuted}>{post.content}</Text>
       <Text fontSize="sm" color={colors.textMuted} mt={4}>
-        {new Date(post.createdAt).toLocaleString()}
+        {`${new Date(post.createdAt).toLocaleString()} by ${post.author.username}`}
       </Text>
     </Box>
   );

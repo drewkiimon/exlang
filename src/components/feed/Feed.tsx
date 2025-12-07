@@ -1,4 +1,4 @@
-import { Container, Skeleton, Spinner, VStack } from '@chakra-ui/react';
+import { Container, Skeleton, VStack } from '@chakra-ui/react';
 
 import { useQuery } from '@tanstack/react-query';
 import FeedPost from '@/components/feed/FeedPost';
@@ -33,7 +33,7 @@ const Feed = () => {
                 <Skeleton key={index} height="150px" w="100%" />
               ))
           : //   I dislike the any type :'(
-            data?.posts.map((post: any) => (
+            data?.posts?.map((post: any) => (
               <FeedPost key={post.id} post={post} />
             ))}
       </VStack>
